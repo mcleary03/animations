@@ -1,0 +1,52 @@
+$ROTATIONS: (
+  quarter:90,
+  half:180,
+  three-quarter:270,
+  full:360
+);
+
+$DIRECTIONS: (
+  left: (from: 0, to: 0),
+  up: (from:0, to:0),
+  right: (from:0, to:0),
+  down: (from:0, to:0)
+);
+
+@each $dir, $val in $DIRECTIONS {
+  $from: map-get($val, 'from');
+  $to: map-get($val, 'to');
+
+  @keyframes slide-#{$dir} {
+    0% { transform: translate( if(map-get($val, 'from' ), map-get($val, 'from'), 0)); }
+    100% { transform: translate( if(map-get($val, 'to' ), map-get($val, 'to'), 0)); }
+  }
+}
+
+@each $name, $rotation in $ROTATIONS {
+  @keyframes spin-#{$name} {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(#{$rotation}deg); }
+  }
+}
+
+@mixin animate (
+  $name,
+  $duration,
+  $timing: linear,
+  $delay: 0s,
+  $iteration: infinite,
+  $direction: normal,
+  $fill: both
+) {
+  animation-name: $name;
+  animation-delay: $delay;
+  animation-direction: $direction;
+  animation-duration: $duration;
+  animation-timing-function: $timing;
+  animation-iteration-count: $iteration;
+  animation-fill-mode: $fill;
+}
+
+.spin {
+  @include animate(spin-half, 0.5s, $delay: 1s, $iteration: 1);
+}
